@@ -1,0 +1,191 @@
+---
+title: "leafArea_30June2015"
+output: pdf_document
+---
+
+Purpose: I just want the total area between genotypes. I am performing the analysis using the plants that were grown for the asymmetry data.
+
+```{r}
+library(tidyr)
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+
+##ggplot custom theme
+
+cbPalette <- c("#56B4E9","#999999", "#E69F00", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+customTheme <- list(theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=16),
+        axis.text.y  = element_text(size=16),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20),
+        strip.text.y = element_text(size = 20),
+        legend.position="none", 
+        strip.background = element_rect(fill="#b0c4de"))
+        )
+```
+
+
+```{r}
+leafArea <- read.csv("../data/leafArea_30June2015.csv")
+
+head(leafArea)
+```
+
+Clean Up.  I used `getArea.ijm` macros to get the the areas from binary .bmp files, but in order to achieve this I had to click in multiple areas of the same file to ensure I was able to grab the leaf using the magic wand tool. Therefore I have two measurements per file.  I need to first get rid of any measurement below 3 cm squared. Then get rid of any double measurements.
+
+```{r}
+dim(leafArea)
+leafArea2 <- subset(leafArea, Area  >= 3.0)
+
+leafArea2 <- subset(leafArea2, Area  <= 200)
+dim(leafArea2)
+```
+
+Now time to get rid of the duplicate names.
+
+```{r}
+leafArea3 <- subset(leafArea2,!duplicated(leafArea2$Label))
+dim(leafArea3)
+```
+
+We are left with 1230, and there are a total of 1,430 files.  The other files the leaves were not centered properly or have holes and will not be used further in analysis.
+
+```{r}
+#Make Genotype Column
+leafArea3$genotype <- ifelse(grepl("_E", leafArea3$Label, ignore.case = T), "e2", 
+         ifelse(grepl("_R", leafArea3$Label, ignore.case = T), "WT", "WT"))
+
+#Make ID column
+leafArea4 <- separate(data = leafArea3, col = Label, into = c("Leaf", "ID"), sep = "_")
+
+```
+
+##Area
+```{r}
+ggplot(leafArea4, aes(genotype, Area)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(alpha = .2, position = "jitter", aes(color = genotype)) +
+  scale_x_discrete(limits=c("WT","e2")) +
+  scale_color_manual(values=cbPalette) +
+  facet_grid(.~Leaf) +
+  theme_bw() +
+  ylab(expression(paste("area ", "c", m^2, sep=""))) +
+  customTheme
+
+```
+
+Now I am going to just look at mature leaves
+
+```{r}
+L1L2 <- subset(leafArea4, Leaf == "L1" | Leaf == "L2")
+
+L1L2$genotype <- as.factor(L1L2$genotype)
+summary(L1L2$genotype) 
+
+ggplot(L1L2, aes(genotype, Area)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(alpha = .3, position = "jitter", aes(color = genotype)) +
+  scale_x_discrete(limits=c("WT","e2")) +
+  scale_color_manual(values=cbPalette) +
+  theme_bw() +
+  ylab(expression(paste("area ", "c", m^2, sep=""))) +
+  customTheme
+  
+t.test(L1L2$Area ~ L1L2$genotype)
+```
+
+I want to make a table of the Area, Perm., AR, Round, and Solidity for the paper. 
+
+```{r}
+head(leafArea4)
+
+ggplot(leafArea4, aes(genotype, Perim.)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(alpha = .2, position = "jitter", aes(color = genotype)) +
+  scale_x_discrete(limits=c("WT","e2")) +
+  scale_color_manual(values=cbPalette) +
+  facet_grid(.~Leaf) +
+  theme_bw() +
+  ylab(expression(paste("perim. ", "c", m^2, sep=""))) +
+  customTheme
+
+t.test(L1L2$Perim. ~ L1L2$genotype)
+```
+
+```{r}
+ggplot(leafArea4, aes(genotype, Circ.)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(alpha = .2, position = "jitter", aes(color = genotype)) +
+  scale_x_discrete(limits=c("WT","e2")) +
+  scale_color_manual(values=cbPalette) +
+  facet_grid(.~Leaf) +
+  theme_bw() +
+  ylab(expression(paste("Circ. ", "c", m^2, sep=""))) +
+  customTheme
+
+t.test(L1L2$Circ. ~ L1L2$genotype)
+```
+
+## Aspect Ratio
+```{r}
+ggplot(leafArea4, aes(genotype, AR)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(alpha = .2, position = "jitter", aes(color = genotype)) +
+  scale_x_discrete(limits=c("WT","e2")) +
+  scale_color_manual(values=cbPalette) +
+  facet_grid(.~Leaf) +
+  theme_bw() +
+  ylab(expression(paste("AR ", "c", m^2, sep=""))) +
+  customTheme
+```
+
+## Round
+
+```{r}
+ggplot(leafArea4, aes(genotype, Round)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(alpha = .2, position = "jitter", aes(color = genotype)) +
+  scale_x_discrete(limits=c("WT","e2")) +
+  scale_color_manual(values=cbPalette) +
+  facet_grid(.~Leaf) +
+  theme_bw() +
+  ylab(expression(paste("perim. ", "c", m^2, sep=""))) +
+  customTheme
+```
+
+## Solidity
+
+```{r}
+ggplot(leafArea4, aes(genotype, Solidity)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(alpha = .2, position = "jitter", aes(color = genotype)) +
+  scale_x_discrete(limits=c("WT","e2")) +
+  scale_color_manual(values=cbPalette) +
+  facet_grid(.~Leaf) +
+  theme_bw() +
+  ylab(expression(paste("Solidity ", "c", m^2, sep=""))) +
+  customTheme
+```
+
+From looking at the data I think the best way to proceed is to combine only L1 and L2, since they are more "fully expanded", then make one large graph that summarizes all the values, by melting 
+
+### Making the leaf characteristics table.
+
+```{r}
+melted <- melt(leafArea4, id.vars = c("Leaf", "ID", "genotype"))
+
+# by leaf number
+summarise(group_by(melted, genotype, Leaf, variable),
+          mean=mean(value), sd=sd(value))
+
+# ignoring leaf number
+summaryLeaf <- summarise(group_by(melted, genotype, variable),
+          mean=mean(value), sd=sd(value))
+
+castSumLeaf.sd <- dcast(summaryLeaf, genotype ~ variable, value.var = "sd") 
+castSumLeaf.mean <- dcast(summaryLeaf, genotype ~ variable, value.var = "mean")
+
