@@ -1,0 +1,14 @@
+Task\ label=part7
+Task\ ID=721501
+Tool=RAXMLHPC2_TGB
+created\ on=2015-08-03 12:46:35.0
+JobHandle=NGBW-JOB-RAXMLHPC2_TGB-2156CD6A2B1046A789142A0BC982BB8C
+resource=comet
+User\ ID=9794
+User\ Name=iamciera
+email=ciera.martinez@gmail.com
+
+Output=(all_outputfiles,*,UNKNOWN,UNKNOWN,UNKNOWN)
+ChargeFactor=1.000000
+cores=48
+JOBID=742827
