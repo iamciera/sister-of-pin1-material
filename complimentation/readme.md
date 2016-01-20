@@ -2,7 +2,7 @@
 
 ## Purpose
 
-To test if complementation by a functional atPIN1 gene (from the patPIN1::atPIN1::GFP) is capable of rescuing the *entire-2* phenotype. 
+To test if complementation by a functional atPIN1 gene (from the patPIN1::atPIN1::GFP) is capable of rescuing the *entire-2*    phenotype. 
 
 ## Experimental Setup
 
