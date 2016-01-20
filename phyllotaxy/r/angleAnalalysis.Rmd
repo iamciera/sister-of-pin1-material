@@ -1,0 +1,203 @@
+---
+output: pdf_document
+---
+#Angle Analysis 
+
+## Plants
+
+-Population 1 was done from photographs on older plants, where we could only retrieve the angle for L1 - L4.
+
+-Population 2 was performed on plants around 20 days old and was calculated from histology. 
+
+-Population 3 was measured from plants around 1 months old from only PIN1::GFP x e2/e2
+
+## Analysis
+
+Libraries
+
+```{r}
+library(reshape2)
+library(ggplot2)
+```
+
+Do analysis on 
+
+```{r}
+
+angleData <- read.csv("../data/anglePopulation1&2&3.csv")
+head(angleData)
+angleDataLeaf <- angleData[,c(2,3,4,5,6)]
+angleDataSub <- subset(angleDataLeaf, leaf != "L7L8")
+levels(angleDataSub$genotype) <- c("WT","e-2", "complemented e-2")
+```
+
+Make a boxplot that illustrates angle divergence.
+
+```{r}
+ggplot(angleDataSub, aes(leaf, angle)) + 
+  geom_boxplot(outlier.size = 0) +
+  geom_point(position = "jitter", alpha = .2) + 
+  facet_grid(.~genotype) + 
+  scale_color_brewer(palette="Dark2") + 
+  theme_bw() + 
+  geom_hline(yintercept=137.5, linetype = "dotted") + 
+  scale_y_continuous(breaks=c(50, 100, 137.5, 150, 200)) + 
+  theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=16),
+        axis.text.y  = element_text(size=16),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20),
+        legend.position="none")
+```
+
+Make a diagram illustrating how many plants of e2 and wt are distichous, spiral & other.
+
+Spiral = Both L2L3 and L3L4 between 147.5 and 127.5.
+Decussate = Leaf L2L3 between 80 to 100 and L3L4 between 190 to 170.
+Other = Everything else. 
+
+At this point it may be beneficial to change to the wide format where each plant in a single observation by casting. 
+
+```{r}
+angleDataPlant <- angleData[,-c(6,1)]
+castAngleData <- dcast(angleDataPlant, plant + genotype ~ leaf, value.var = "angle")
+```
+
+How many of each genotype
+```{r}
+summary(castAngleData$genotype) 
+
+wtAngle <- subset(castAngleData, genotype == "3130")
+
+#Spiral WT
+wtSpiralL34 <- subset(wtAngle, L3L4 <= 150 & L3L4 >= 120)
+dim(wtSpiralL34) #75
+
+wtDecL34 <- subset(wtAngle, L3L4 <= 195 & L3L4 >= 165)
+dim(wtDecL34) #5
+
+##e2
+
+e2Angle <- subset(castAngleData, genotype == "e2")
+dim(e2Angle)
+
+#Spiral e2
+e2SpiralL34 <- subset(e2Angle, L3L4 <= 150 & L3L4 >= 120)
+dim(e2SpiralL34) #18
+
+e2DecL34 <- subset(e2Angle, L3L4 <= 195 & L3L4 >= 165)
+dim(e2DecL34) #39
+39/88
+44+39
+83/88
+
+#How many plant were recorded for L3L4
+summary(is.na(e2Angle$L3L4)) #87
+
+#Other
+88 - 39 -18 #=31
+```
+
+A few other ways to look at this data 
+
+```{r}
+ggplot(angleDataSub, aes(angle, fill = leaf)) + 
+  geom_bar() +
+  facet_grid(.~genotype) + 
+  scale_color_brewer(palette="Dark2") + 
+  theme_bw() +  
+  scale_x_continuous(breaks=c(50, 90, 137.5, 180, 200)) + 
+  theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=16),
+        axis.text.y  = element_text(size=16),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20),
+        legend.position="none"
+        )
+
+angleDataSubL12 <- subset(angleDataSub, leaf == "L1L2")
+angleDataSubL23 <- subset(angleDataSub, leaf == "L2L3")
+angleDataSubL34 <- subset(angleDataSub, leaf == "L3L4")
+angleDataSubL45 <- subset(angleDataSub, leaf == "L4L5")
+
+angleDataSubSub <- rbind(angleDataSubL12, angleDataSubL23, angleDataSubL34, angleDataSubL45)
+
+ggplot(angleDataSubSub, aes(angle)) + 
+  geom_bar() +
+  facet_grid(leaf~genotype) + 
+  scale_color_brewer(palette="Dark2") + 
+  theme_bw() +  
+  scale_x_continuous(breaks=c(50, 90, 137.5, 180, 200)) + 
+  theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=16),
+        axis.text.y  = element_text(size=16),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20),
+        strip.text.y = element_text(size = 18),
+        strip.background = element_rect(fill="#b0c4de"),
+        legend.position="none"
+        )
+
+
+
+ggplot(angleDataSubSub, aes(angle)) + 
+  geom_bar() +
+  facet_grid(.~genotype) + 
+  theme_bw() +  
+  scale_x_continuous(breaks=c(50, 90, 137.5, 180, 200)) + 
+  geom_vline(xintercept=137.5, color = "red", linetype= "longdash") +
+  theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=16),
+        axis.text.y  = element_text(size=16),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20),
+        strip.text.y = element_text(size = 18),
+        strip.background = element_rect(fill="#b0c4de"),
+        legend.position="none"
+        )
+
+
+
+
+
+ggplot(angleDataSub, aes(angle)) + 
+  geom_density() +
+  facet_grid(.~genotype) + 
+  scale_color_brewer(palette="Dark2") + 
+  theme_bw() +  
+  scale_x_continuous(breaks=c(50, 90, 137.5, 180, 200)) + 
+  theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=16),
+        axis.text.y  = element_text(size=16),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20),
+        legend.position="none"
+        )
+
+ggplot(angleDataSub, aes(angle, fill = leaf, alpha = 50)) + 
+  geom_density() +
+  facet_grid(.~genotype) + 
+  scale_color_brewer(palette="Dark2") + 
+  theme_bw() +  
+  scale_x_continuous(breaks=c(50, 90, 137.5, 180, 200)) + 
+  theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=16),
+        axis.text.y  = element_text(size=16),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20)
+        )
+```
+
+
