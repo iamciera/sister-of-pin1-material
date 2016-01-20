@@ -1,0 +1,132 @@
+---
+title: "Meristem Size Anlysis"
+output: pdf_document
+---
+
+Libraries
+```{r}
+library(ggplot2)
+library(car)
+library(reshape2)
+```
+
+```{r}
+##ggplot custom theme
+
+cbPalette <- c("#56B4E9","#999999", "#E69F00", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+customTheme <- list(theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=16),
+        axis.text.y  = element_text(size=16),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20),
+        strip.text.y = element_text(size = 20),
+        strip.background = element_rect(fill="#b0c4de"),
+        legend.position="none") )
+```
+
+```{r}
+
+merSize <- read.csv("../data/widthHeight_all.csv")
+head(merSize)
+
+merSize <- merSize[, -1] 
+
+merSize$genotype <- gsub("e2", "e-2", merSize$genotype)
+merSize$genotype <- gsub("wt", "WT", merSize$genotype)
+
+head(merSize)
+summary(merSize)
+```
+
+## Visualization
+
+### Height
+
+Height is significantly larger in *e-2*. There is also significant 
+
+```{r}
+ggplot(merSize, aes(genotype, height)) + 
+  geom_boxplot(alpha = .7) + 
+  geom_point(position = "jitter", alpha = .6, aes(color = genotype)) + 
+  theme_bw() +
+  scale_x_discrete(limits=c("WT","e-2")) +
+  scale_color_manual(values=cbPalette) +
+  ylab("size (mm)") +
+  customTheme
+
+t.test(merSize$height ~ merSize$genotype, var.eq=F, alt = "two.sided")
+
+###Test for variance
+
+e2 <- subset(merSize, genotype == "e-2")
+wt <- subset(merSize, genotype == "WT")
+
+# Variance is over 5 times greater in e-2
+var(e2$height)
+var(wt$height)
+
+sd(e2$height)
+sd(wt$height)
+
+
+#Here are two different tests for difference in variance. Both show that there is a difference in vairiance
+var.test(e2$height, wt$height, alternative="two.sided")
+leveneTest(merSize$height, merSize$genotype)
+```
+
+
+### Width
+
+```{r}
+ggplot(merSize, aes(genotype, width)) + 
+  geom_boxplot(alpha = .7) + 
+  geom_point(position = "jitter", alpha = .6, aes(color = genotype)) + 
+  theme_bw() +
+  scale_x_discrete(limits=c("WT","e-2")) +
+  scale_color_manual(values=cbPalette) +
+  ylab("size (mm)") +
+  customTheme
+
+t.test(merSize$width ~ merSize$genotype, var.eq=F, alt = "two.sided")
+```
+
+### Test for variance
+
+```{r}
+sopin1a <- subset(merSize, genotype == "e-2")
+wt <- subset(merSize, genotype == "WT")
+
+# Variance is over 2 times greater in e-2
+var(sopin1a$width)
+var(wt$width)
+
+sd(sopin1a$width)
+sd(wt$width)
+
+#Here are two different tests for difference in variance.
+var.test(sopin1a$width, wt$width, alternative="two.sided")
+leveneTest(merSize$width, merSize$genotype)
+```
+
+###Both in one Plot
+```{r}
+head(merSize)
+mdata <- melt(merSize, id=c("genotype","rep"))
+head(mdata)
+
+ggplot(mdata, aes(genotype, value)) + 
+  geom_boxplot(alpha = .7, outlier.size = 0) + 
+  geom_point(position = "jitter", alpha = .6, aes(color = genotype)) + 
+  theme_bw() +
+  scale_x_discrete(limits=c("WT","e-2")) +
+  scale_color_manual(values=cbPalette) +
+  customTheme + 
+  ylab("size (mm)") +
+  facet_grid(.~variable) 
+  
+```
+
+    
