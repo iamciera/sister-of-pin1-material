@@ -56,7 +56,7 @@ names <- e_coe@names
 str(names)
 ```
 
-I can't look up how to do this in R at the moment but I need to extract the genotype and leaf number information later
+Cleaning and organizaing data for analysis
 ```{r, eval=FALSE}
 # Extract genotypes from names
 namesTable <- as.data.frame(names)
@@ -124,12 +124,17 @@ epca_fac <- cbind(scores, genotype)
 #I want to rename the columns
 colnames(epca_fac) <- c("pc1", "pc2", "pc3", "pc4", "pc5", "genotype")
 
-#By genotype. PC1, PC2. WOW! Great separation of entire vs. WT by PC1!!!
+#By genotype. PC1, PC2. 
+#PCs 1 and 3, explaining leaf width and lobing, respectively, most differentiate WT from e2. PC2 explains asymmetry common to both genotypes
 p <- ggplot(epca_fac, aes(pc1, pc2, colour=genotype))
 p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw()
 
 #By genotype. PC3, PC4
 p <- ggplot(epca_fac, aes(pc3, pc4, colour=genotype))
+p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw()
+
+# By genotype PC1, PC3
+p <- ggplot(epca_fac, aes(pc1, pc3, colour=genotype))
 p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw()
 
 #Only entire, by leaf number. PC1, PC2
