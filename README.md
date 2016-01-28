@@ -10,7 +10,7 @@ Manuscript status: In preparation for PLoS Genetics.
 
 ## Code
 
-All R code can be run by setting working directory to location script.
+All R code can be run by setting working directory to location of script.
 
 
 
