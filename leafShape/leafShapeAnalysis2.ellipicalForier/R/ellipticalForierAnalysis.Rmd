@@ -54,6 +54,16 @@ e_coe <- NEF2COE("../data/e2_wt_NEF.txt")
 #so that we can compare the two genotypes
 names <- e_coe@names
 str(names)
+
+customTheme <- list(theme(axis.title.x = element_text(face="bold", size=30), 
+        axis.title.y = element_text(face="bold", size=30), 
+        axis.text.x  = element_text(size=20),
+        axis.text.y  = element_text(size=20),
+        legend.title = element_text(size=30),
+        legend.text = element_text(size=20),
+        strip.text.x = element_text(size = 20),
+        strip.text.y = element_text(size = 20),
+        legend.position="none") )
 ```
 
 Cleaning and organizaing data for analysis
@@ -127,15 +137,15 @@ colnames(epca_fac) <- c("pc1", "pc2", "pc3", "pc4", "pc5", "genotype")
 #By genotype. PC1, PC2. 
 #PCs 1 and 3, explaining leaf width and lobing, respectively, most differentiate WT from e2. PC2 explains asymmetry common to both genotypes
 p <- ggplot(epca_fac, aes(pc1, pc2, colour=genotype))
-p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw()
+p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw() + customTheme
 
 #By genotype. PC3, PC4
 p <- ggplot(epca_fac, aes(pc3, pc4, colour=genotype))
-p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw()
+p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw() + customTheme
 
 # By genotype PC1, PC3
 p <- ggplot(epca_fac, aes(pc1, pc3, colour=genotype))
-p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw()
+p + geom_point() + scale_colour_manual(values=c("light blue","black","light blue","black","light blue","black","light blue","black")) + theme_bw() + customTheme
 
 #Only entire, by leaf number. PC1, PC2
 p <- ggplot(epca_fac, aes(pc1, pc2, colour=genotype))
