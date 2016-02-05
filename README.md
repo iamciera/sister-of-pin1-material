@@ -6,7 +6,11 @@ Supplemental data and code for "A Sister of PIN1 gene in tomato (Solanum lycoper
 
 Repository Maintainer: Ciera Martinez.  Please contact by emailing ciera.martinez@gmail.com with any questions.
 
-Manuscript status: In preparation for PLoS Genetics.
+Manuscript status: 
+
+1/19/15 In preparation for PLoS Genetics.
+1/31/15 Submitted to PLoS Genetics.
+
 
 ## Code
 
