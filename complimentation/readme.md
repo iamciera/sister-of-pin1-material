@@ -2,7 +2,7 @@
 
 ## Purpose
 
-To test if complementation by a functional atPIN1 gene (from the patPIN1::atPIN1::GFP) is capable of rescuing the *entire-2*    phenotype. 
+To test if complementation by a functional atPIN1 gene (from the patPIN1::atPIN1::GFP) is capable of rescuing the *entire-2* phenotype. 
 
 ## Experimental Setup
 
@@ -37,11 +37,9 @@ We scored the progeny of these individuals and as expected, approximately 3/4 (7
 
 ### Additional Notes
 
-Of the 45 which did show PIN1::GFP presences, 22 did have a spiral phenotype, indicating that some *entire-2* plants do have a spiral phenotype.
-
 **How many *entire-2* plants display a spiral phenotype?**
 
-Of the 117 plants with PIN1::GFP presence, 14 plants did not have the spiral phenotype, indicating some of the plants were not rescued. 
+Of the 117 plants with PIN1::GFP presence, 14 plants did not have the spiral phenotype.  This could reflect either 1.) Time of measurement.  Consistant spiral phyllotactic patterning doesn't not start until after ~ Leaf 4. All wild type plants are not scored as spiral early in development. 2.) These plants were not fully rescued. 
 
-PIN1::GFP presence could not rescue leaf shape phenotype fully.  
+Leaf shape appears abbarent in e2/e2 plants with PIN1::GFP presence.  Although leaf shape was not quanitified explicitly, it appears as though PIN1::GFP could not rescue leaf shape phenotype fully.  
 
