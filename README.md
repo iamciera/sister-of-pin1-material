@@ -8,9 +8,13 @@ Repository Maintainer: Ciera Martinez.  Please contact by emailing ciera.martine
 
 Manuscript status: 
 
-1/19/15 In preparation for PLoS Genetics.
+1/19/16 In preparation for PLoS Genetics.
 
-1/31/15 Submitted to PLoS Genetics.
+1/31/16 Submitted to PLoS Genetics.
+
+2/9/16 Under Review.
+
+
 
 
 ## Code
