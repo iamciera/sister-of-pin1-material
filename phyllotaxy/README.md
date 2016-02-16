@@ -4,7 +4,7 @@ Date: Summer 2014
 
 ## Experiment Details 
 
-The entire-2 accession used for this study is 3-705, which was compared to its background genotype 3130.  Tomato resources were obtained from the U.C. Davis Tomato Genetics Resource Center (TGRC).  
+The *entire-2* accession used for this study (TGRC 3-705) was compared to the background genotype 3130.  Tomato resources were obtained from the U.C. Davis Tomato Genetics Resource Center (TGRC).  
 
 We grew plants until they were 20 days old.  The plants were fixed fixed and prepared for histology using highthrough put stem staining protocol.  They were then photographed and the pictures were saved.  
 
