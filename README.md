@@ -12,9 +12,9 @@ Manuscript status:
 
 1/31/16 Submitted to PLoS Genetics.
 
-2/9/16 Under Review.
+2/9/16 Under review.
 
-
+3/2/16 Still under review in PLoS Genetics & submitted to BioRxiV
 
 
 ## Code
