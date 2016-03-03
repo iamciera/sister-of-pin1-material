@@ -14,7 +14,7 @@ Manuscript status:
 
 2/9/16 Under review.
 
-3/2/16 Still under review in PLoS Genetics & submitted to BioRxiV
+3/2/16 Still under review at PLoS Genetics & submitted to BioRxiV
 
 3/3/16 Pre-print published on BioRxiV: [http://biorxiv.org/content/early/2016/03/02/042150](http://biorxiv.org/content/early/2016/03/02/042150).
 
