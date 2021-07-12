@@ -1,4 +1,4 @@
-#Segregation Experiment
+# Segregation Experiment
 
 ## Purpose
 
